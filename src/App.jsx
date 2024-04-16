@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  "https://rnqqmvmlbgixiztfimpc.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJucXFtdm1sYmdpeGl6dGZpbXBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTIyMzI2NzcsImV4cCI6MjAyNzgwODY3N30.03aBa8uHAJqom8LW0JHVpJ7E7zv-_wig7tursnJckmY"
-);
+import supabase from "@/supabase";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -15,15 +10,20 @@ function App() {
 
   async function getCountries() {
     const { data } = await supabase.from("countries").select();
-    setCountries(data);
+    if (data) {
+      setCountries(data);
+    } else {
+      console.error("No data received from Supabase");
+      setCountries([{ name: "No data received from Supabase" }]);
+    }
   }
 
   return (
-    <ul>
+    <ol>
       {countries.map((country) => (
         <li key={country.name}>{country.name}</li>
       ))}
-    </ul>
+    </ol>
   );
 }
 
