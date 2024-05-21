@@ -1,30 +1,7 @@
-import { useEffect, useState } from "react";
-import supabase from "@/supabase";
+import Router from "@/Router";
 
 function App() {
-  const [countries, setCountries] = useState([]);
-
-  useEffect(() => {
-    getCountries();
-  }, []);
-
-  async function getCountries() {
-    const { data } = await supabase.from("countries").select();
-    if (data) {
-      setCountries(data);
-    } else {
-      console.error("No data received from Supabase");
-      setCountries([{ name: "No data received from Supabase" }]);
-    }
-  }
-
-  return (
-    <ol>
-      {countries.map((country) => (
-        <li key={country.name}>{country.name}</li>
-      ))}
-    </ol>
-  );
+  return <Router />;
 }
 
 export default App;
