@@ -7,6 +7,7 @@ import BlogPosting from "@/routes/BlogPosting";
 import BlogList from "@/routes/BlogList";
 import NotFound from "@/layouts/NotFound";
 import BlogLayout from "./layouts/BlogLayout";
+import LogInForm from "./components/LogInForm";
 
 const Router = () => {
   return (
@@ -19,6 +20,7 @@ const Router = () => {
           <Route path="posting" element={<BlogPosting />} />
           <Route path="list" element={<BlogList />} />
         </Route>
+        <Route path="/admin" element={<LogInForm />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
