@@ -1,12 +1,16 @@
 // Post.jsx
 import MDEditor from "@uiw/react-md-editor";
+import { useNavigate } from "react-router-dom";
 
 const Post = ({ post }) => {
-  console.log(post.tags);
+  console.log(post);
+  const navigate = useNavigate();
   return (
     <div className="border border-gray-300 px-10 py-5 my-10 w-full flex flex-col gap-5">
-      <h1 className="text-3xl font-bold">{post.title}</h1>
-      <div className="flex gap-2 mb-5">
+      <h1 className="text-3xl font-bold border-b-2 pb-5 pt-5 mb-3">
+        {post.title}
+      </h1>
+      <div className="flex gap-2 mb-10 pb-2 border-b-2">
         {post.tags?.map((tag, index) => (
           <p
             key={index}
@@ -17,6 +21,14 @@ const Post = ({ post }) => {
         ))}
       </div>
       <MDEditor.Markdown source={post.content} />
+      <div className="flex w-full justify-end">
+        <button
+          className="hover:underline text-Gray text-sm"
+          onClick={() => navigate(`/blog/edit/${post.id}`)}
+        >
+          수정하기
+        </button>
+      </div>
     </div>
   );
 };

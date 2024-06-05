@@ -5,10 +5,10 @@ import rehypeSanitize from "rehype-sanitize";
 import onImagePasted from "@/utils/onImagePasted";
 import CreatableSelect from "react-select/creatable";
 
-const PostForm = ({ onSubmit }) => {
-  const [content, setContent] = useState("");
-  const [tags, setTags] = useState([]);
-  const [title, setTitle] = useState("");
+const PostForm = ({ initialValue, onSubmit }) => {
+  const [content, setContent] = useState(initialValue?.content || "");
+  const [tags, setTags] = useState(initialValue?.tags || []);
+  const [title, setTitle] = useState(initialValue?.title || "");
 
   const handleSubmit = (event) => {
     event.preventDefault();
