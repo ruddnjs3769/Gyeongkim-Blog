@@ -13,7 +13,8 @@ const storageFileUpload = async (file) => {
     alert("사진 업로드 에러 발생");
     throw error;
   }
-  return data.path;
+  console.log(data);
+  return data.fullPath;
 };
 
 export default storageFileUpload;

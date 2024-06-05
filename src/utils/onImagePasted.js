@@ -10,11 +10,11 @@ const onImagePasted = async (dataTransfer, setMarkdown) => {
       files.push(file);
     }
   }
-
+  const baseURL = import.meta.env.VITE_SUPABASE_STORAGE_URL;
   await Promise.all(
     files.map(async (file) => {
       const url = await storageFileUpload(file);
-      const insertedMarkdown = insertToTextArea(`![](${url})`);
+      const insertedMarkdown = insertToTextArea(`![](${baseURL}${url})`);
       if (!insertedMarkdown) {
         return;
       }

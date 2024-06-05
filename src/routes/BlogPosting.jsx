@@ -13,9 +13,9 @@ const BlogPosting = () => {
   };
 
   return (
-    <div>
+    <>
       <PostForm onSubmit={handleSubmit} />
-    </div>
+    </>
   );
 };
 

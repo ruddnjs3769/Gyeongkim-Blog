@@ -5,11 +5,14 @@ import useSWR from "swr";
 const BlogList = () => {
   const { data: posts, error, isLoading } = useSWR("posts", fetchPosts);
   console.log(posts);
+  const sortedPosts = posts?.sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  );
   if (error) return <div>Error: {error}</div>;
   if (isLoading) return <div>Loading...</div>;
   return (
     <div>
-      {posts.map((post) => (
+      {sortedPosts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
     </div>
