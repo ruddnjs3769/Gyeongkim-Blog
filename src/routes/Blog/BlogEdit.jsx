@@ -1,16 +1,16 @@
 import PostForm from "@/components/PostForm.jsx";
-import supabase from "../supabase";
+import { updatePost } from "@/supabase/posts";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchPost } from "@/supabase/posts";
+import { readPost } from "@/supabase/posts";
 import useSWR from "swr";
 
 const BlogPosting = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: post, error, isLoading } = useSWR(id, fetchPost);
+  const { data: post, error, isLoading } = useSWR(id, readPost);
 
   const handleSubmit = async (post) => {
-    const { error } = await supabase.from("posts").update(post).eq("id", id);
+    const { error } = updatePost(id, post);
     if (error) {
       console.error("Error: ", error);
     } else {

@@ -1,9 +1,9 @@
 import PostForm from "@/components/PostForm.jsx";
-import supabase from "../supabase";
+import { createPost } from "@/supabase/posts";
 
 const BlogPosting = () => {
-  const handleSubmit = async (post) => {
-    const { data, error } = await supabase.from("posts").insert([post]);
+  const handleSubmit = (post) => {
+    const { data, error } = createPost(post);
 
     if (error) {
       console.error("Error: ", error);

@@ -1,6 +1,6 @@
 import Greeting from "../components/Greeting";
 
-const HomePage = () => {
+const Home = () => {
   return (
     <>
       <Greeting />
@@ -8,4 +8,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Home;
