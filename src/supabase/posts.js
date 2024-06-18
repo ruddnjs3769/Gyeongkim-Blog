@@ -1,6 +1,6 @@
 import supabase from "./index";
 
-export const fetchPosts = async () => {
+export const readPosts = async () => {
   let { data: posts, error } = await supabase.from("posts").select("*");
   if (error) {
     throw error;
@@ -8,7 +8,7 @@ export const fetchPosts = async () => {
   return posts;
 };
 
-export const fetchPost = async (id) => {
+export const readPost = async (id) => {
   let { data: response, error } = await supabase
     .from("posts")
     .select("*")
@@ -18,4 +18,22 @@ export const fetchPost = async (id) => {
     throw error;
   }
   return response; // response is an object // { status: number, statusText: string }
+};
+
+export const createPost = async (post) => {
+  const { data, error } = await supabase.from("posts").insert([post]);
+  return { data, error };
+};
+
+export const updatePost = async (id, post) => {
+  const { error } = await supabase.from("posts").update(post).eq("id", id);
+  return { error };
+};
+
+export const readTags = async () => {
+  const { data, error } = await supabase.from("posts").select("tags");
+  if (error) {
+    throw error;
+  }
+  return data;
 };
