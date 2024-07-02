@@ -15,7 +15,7 @@ const BlogPosting = () => {
       console.error("Error: ", error);
     } else {
       alert("수정이 완료되었습니다.");
-      navigate(`/blog/${id}`);
+      navigate(`/blog/detail/${id}`);
     }
   };
   console.log(post);
