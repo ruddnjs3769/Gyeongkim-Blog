@@ -19,6 +19,7 @@ export const logOut = async () => {
     alert("로그아웃 실패", error.message);
     throw error;
   }
+  alert("로그아웃 성공");
   return;
 };
 

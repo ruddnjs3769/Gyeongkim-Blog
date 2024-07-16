@@ -37,3 +37,8 @@ export const readTags = async () => {
   }
   return data;
 };
+
+export const deletePost = async (id) => {
+  const { error } = await supabase.from("posts").delete().eq("id", id);
+  return { error };
+};
