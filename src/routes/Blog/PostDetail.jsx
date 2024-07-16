@@ -1,8 +1,10 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { readPost } from "@/supabase/posts";
 import useSWR from "swr";
 import Post from "@/components/Post";
 import TagBar from "@/components/TagBar";
+import AddComment from "@/components/AddComment";
+import CommentList from "@/components/CommentList";
 import { useState, useEffect } from "react";
 import { getSession } from "@/supabase/adminLogin";
 
@@ -29,6 +31,8 @@ const PostDetail = () => {
     <div>
       <TagBar />
       <Post post={post} isLogin={isLogin} />
+      <AddComment postId={id} />
+      <CommentList postId={id} />
     </div>
   );
 };
