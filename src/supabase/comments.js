@@ -29,17 +29,52 @@ export const fetchComments = async (postId) => {
 };
 
 // 댓글 수정
-export const updateComment = async (commentId, inputPassword, newContent) => {
+export const updateComment = async ({
+  commentId,
+  newAuthor,
+  newContent,
+  inputPassword,
+}) => {
   const { error } = await supabase
     .from("comment")
-    .update({ content: newContent, updated_at: new Date() })
+    .update({ author: newAuthor, content: newContent, updated_at: new Date() })
     .match({ id: commentId, password: inputPassword });
+  if (error) {
+    console.error(error);
+    alert("댓글 수정 오류 발생");
+    return false;
+  } else {
+    return true;
+  }
+};
+
+// 수정된 댓글 유효성 검사
+export const validateUpdatedComment = async (
+  commentId,
+  expectedAuthor,
+  expectedContent
+) => {
+  const { data: updatedComments, error } = await supabase
+    .from("comment")
+    .select("*")
+    .eq("id", commentId);
 
   if (error) {
     console.error(error);
+    alert("댓글 조회 오류 발생");
     return false;
   }
 
+  if (
+    !updatedComments.length ||
+    updatedComments[0].author !== expectedAuthor ||
+    updatedComments[0].content !== expectedContent
+  ) {
+    alert("댓글 수정이 정확히 반영되지 않았습니다. 비밀번호를 확인하세요.");
+    return false;
+  }
+
+  alert("댓글 수정이 정확히 반영되었습니다.");
   return true;
 };
 
@@ -52,8 +87,10 @@ export const deleteComment = async (commentId, inputPassword) => {
 
   if (error) {
     console.error(error);
+    alert("댓글 삭제 오류 발생");
     return false;
+  } else {
+    alert("댓글이 삭제되었습니다.");
+    return true;
   }
-
-  return true;
 };
