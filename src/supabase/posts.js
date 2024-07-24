@@ -35,10 +35,23 @@ export const readTags = async () => {
   if (error) {
     throw error;
   }
+  if (data) {
+    let tags = data.map((post) => post.tags);
+    return tags.flat();
+  }
   return data;
 };
 
 export const deletePost = async (id) => {
   const { error } = await supabase.from("posts").delete().eq("id", id);
   return { error };
+};
+
+export const readUniqueTags = async () => {
+  const { data, error } = await supabase.rpc("unique_tags");
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+  return data;
 };
