@@ -3,8 +3,8 @@ import { readPost } from "@/supabase/posts";
 import useSWR from "swr";
 import Post from "@/components/Post";
 import TagBar from "@/components/TagBar";
-import AddComment from "@/components/AddComment";
-import CommentList from "@/components/CommentList";
+import AddComment from "@/components/comments/AddComment";
+import CommentList from "@/components/comments/CommentList";
 import { useState, useEffect } from "react";
 import { getSession } from "@/supabase/adminLogin";
 

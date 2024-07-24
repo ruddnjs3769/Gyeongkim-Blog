@@ -7,7 +7,6 @@ const TagBar = () => {
   if (error) return <div>Error: {error}</div>;
   if (isLoading) return <div>Loading...</div>;
   console.log(tags);
-  tags;
 
   return (
     <div>
