@@ -1,29 +1,47 @@
 // PostForm.jsx
-import { useState } from "react";
+import { useEffect } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import onImagePasted from "@/utils/onImagePasted";
 import CreatableSelect from "react-select/creatable";
+import usePostStore from "@/zustand/usePostStore";
 
 const PostForm = ({ initialValue, onSubmit }) => {
-  const [content, setContent] = useState(initialValue?.content || "");
-  const [tags, setTags] = useState(initialValue?.tags || []);
-  const [title, setTitle] = useState(initialValue?.title || "");
+  const { post, setPost, resetPost, loadPostFromLocalStorage } = usePostStore();
+  // const [content, setContent] = useState(initialValue?.content || "");
+  // const [tags, setTags] = useState(initialValue?.tags || []);
+  // const [title, setTitle] = useState(initialValue?.title || "");
+  const { title, tags, content } = post;
+
+  useEffect(() => {
+    if (initialValue) {
+      setPost({
+        title: initialValue.title,
+        tags: initialValue.tags,
+        content: initialValue.content,
+      });
+    } else {
+      resetPost();
+      loadPostFromLocalStorage();
+    }
+  }, [initialValue, setPost, loadPostFromLocalStorage]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     onSubmit({ title, tags, content });
-    setContent("");
-    setTags([]);
-    setTitle("");
+    resetPost();
   };
 
   const handleTagChange = (selectedOptions) => {
-    setTags(selectedOptions.map((option) => option.value));
+    setPost({ ...post, tags: selectedOptions.map((option) => option.value) });
   };
 
   const handleTitleChange = (event) => {
-    setTitle(event.target.value);
+    setPost({ ...post, title: event.target.value });
+  };
+
+  const handleContentChange = (newContent) => {
+    setPost({ ...post, content: newContent });
   };
 
   return (
@@ -50,15 +68,15 @@ const PostForm = ({ initialValue, onSubmit }) => {
       <MDEditor
         height={500}
         value={content}
-        onChange={setContent}
+        onChange={handleContentChange}
         previewOptions={{
           rehypePlugins: [[rehypeSanitize]],
         }}
         onPaste={async (event) => {
-          await onImagePasted(event.clipboardData, setContent);
+          await onImagePasted(event.clipboardData, handleContentChange);
         }}
         onDrop={async (event) => {
-          await onImagePasted(event.dataTransfer, setContent);
+          await onImagePasted(event.dataTransfer, handleContentChange);
         }}
       />
       <button

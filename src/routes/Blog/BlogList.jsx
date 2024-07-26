@@ -1,10 +1,10 @@
 import { readPosts } from "@/supabase/posts";
 import PostCard from "@/components/PostCard";
 import useSWR from "swr";
-import useStore from "@/zustand/store";
+import useTagStore from "@/zustand/useTagStore";
 
 const BlogList = () => {
-  const currentTag = useStore((state) => state.currentTag);
+  const currentTag = useTagStore((state) => state.currentTag);
 
   const { data: posts, error, isLoading } = useSWR("posts", readPosts);
 

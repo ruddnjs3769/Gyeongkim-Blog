@@ -9,7 +9,14 @@ import { getSession } from "@/supabase/adminLogin";
 
 const PostDetail = () => {
   const { id } = useParams();
-  const { data: post, error, isLoading } = useSWR(id, () => readPost(id));
+  const {
+    data: post,
+    error,
+    isLoading,
+  } = useSWR("post" + id, () => readPost(id), {
+    revalidateOnMount: true,
+    revalidateIfStale: false,
+  });
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {

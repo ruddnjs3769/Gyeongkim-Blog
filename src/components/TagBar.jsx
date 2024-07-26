@@ -1,11 +1,11 @@
 import { readTags } from "@/supabase/posts";
 import useSWR from "swr";
-import useStore from "@/zustand/store";
+import useTagStore from "@/zustand/useTagStore";
 
 const TagBar = () => {
   const { data: tags, error, isLoading } = useSWR("tags", readTags);
-  const setCurrentTag = useStore((state) => state.setCurrentTag);
-  const currentTag = useStore((state) => state.currentTag);
+  const setCurrentTag = useTagStore((state) => state.setCurrentTag);
+  const currentTag = useTagStore((state) => state.currentTag);
   console.log(currentTag);
 
   if (error) return <div>Error: {error}</div>;
