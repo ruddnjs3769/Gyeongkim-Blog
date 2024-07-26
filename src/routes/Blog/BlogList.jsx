@@ -5,7 +5,6 @@ import useStore from "@/zustand/store";
 
 const BlogList = () => {
   const currentTag = useStore((state) => state.currentTag);
-  console.log(currentTag);
 
   const { data: posts, error, isLoading } = useSWR("posts", readPosts);
 

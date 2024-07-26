@@ -94,3 +94,18 @@ export const deleteComment = async (commentId, inputPassword) => {
     return true;
   }
 };
+
+// 댓글 개수 조회
+export const countComments = async (postId) => {
+  const { error, count } = await supabase
+    .from("comments")
+    .select("*", { count: "exact" })
+    .eq("post_id", postId);
+
+  if (error) {
+    console.error("Error fetching comment count:", error);
+    return null;
+  }
+
+  return count;
+};
