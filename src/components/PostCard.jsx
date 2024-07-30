@@ -13,8 +13,17 @@ const PostCard = ({ post }) => {
     data: comments,
     error,
     isLoading,
-  } = useSWR(id, () => fetchComments(id));
-  const commentCount = comments?.length;
+  } = useSWR(`comments/${id}`, () => fetchComments(id));
+
+  const commentCount = (() => {
+    if (error) return <div>Error: {error}</div>;
+    if (isLoading) return <div>Loading...</div>;
+    if (comments) {
+      return comments.length;
+    } else {
+      return 0;
+    }
+  })();
 
   const plainTextContent = content
     .replace(/!\[.*\]\(.*\)/g, "") // 이미지 제거

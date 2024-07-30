@@ -8,10 +8,7 @@ import usePostStore from "@/zustand/usePostStore";
 
 const PostForm = ({ initialValue, onSubmit }) => {
   const { post, setPost, resetPost, loadPostFromLocalStorage } = usePostStore();
-  // const [content, setContent] = useState(initialValue?.content || "");
-  // const [tags, setTags] = useState(initialValue?.tags || []);
-  // const [title, setTitle] = useState(initialValue?.title || "");
-  const { title, tags, content } = post;
+  const { title = "", tags = [], content } = post;
 
   useEffect(() => {
     if (initialValue) {
@@ -60,7 +57,7 @@ const PostForm = ({ initialValue, onSubmit }) => {
         isClearable
         isSearchable
         name="tags"
-        value={tags.map((t) => ({ label: t, value: t }))}
+        value={tags?.map((t) => ({ label: t, value: t }))}
         onChange={handleTagChange}
         className="basic-multi-select"
         classNamePrefix="select"
