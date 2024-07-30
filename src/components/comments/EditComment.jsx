@@ -1,7 +1,7 @@
 import { updateComment, validateUpdatedComment } from "@/supabase/comments";
 import { useState } from "react";
 
-const EditComment = ({ commentId, author, content, setIsEditing }) => {
+const EditComment = ({ commentId, author, content, toggleEditing }) => {
   const [editedAuthor, setEditedAuthor] = useState(author);
   const [password, setPassword] = useState("");
   const [editedContent, setEditedContent] = useState(content);
@@ -18,7 +18,7 @@ const EditComment = ({ commentId, author, content, setIsEditing }) => {
     if (isUpdated) {
       await validateUpdatedComment(commentId, editedAuthor, editedContent);
     }
-    setIsEditing(false);
+    toggleEditing(commentId);
   };
   console.log(editedAuthor);
   console.log(editedContent);

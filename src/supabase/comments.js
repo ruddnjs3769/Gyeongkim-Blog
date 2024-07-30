@@ -3,7 +3,8 @@ import supabase from "@/supabase";
 export const addComment = async (postId, author, content, password) => {
   const { data, error } = await supabase
     .from("comment")
-    .insert([{ postId, author, content, password, created_at: new Date() }]);
+    .insert([{ postId, author, content, password, created_at: new Date() }])
+    .select();
 
   if (error) {
     console.error(error);
@@ -38,7 +39,9 @@ export const updateComment = async ({
   const { error } = await supabase
     .from("comment")
     .update({ author: newAuthor, content: newContent, updated_at: new Date() })
-    .match({ id: commentId, password: inputPassword });
+    .match({ id: commentId, password: inputPassword })
+    .select();
+
   if (error) {
     console.error(error);
     alert("댓글 수정 오류 발생");
@@ -80,14 +83,20 @@ export const validateUpdatedComment = async (
 
 // 댓글 삭제
 export const deleteComment = async (commentId, inputPassword) => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("comment")
     .delete()
-    .match({ id: commentId, password: inputPassword });
+    .match({ id: commentId, password: inputPassword })
+    .select();
 
-  if (error) {
+  if (!inputPassword) {
+    alert("비밀번호를 입력해주세요.");
+    return false;
+  }
+
+  if (error || !data.length) {
     console.error(error);
-    alert("댓글 삭제 오류 발생");
+    alert("댓글 삭제 오류 발생. 비밀번호를 확인해주세요.");
     return false;
   } else {
     alert("댓글이 삭제되었습니다.");

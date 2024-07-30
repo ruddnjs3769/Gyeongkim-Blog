@@ -1,10 +1,14 @@
 import { addComment } from "@/supabase/comments";
+import { useSWRConfig } from "swr";
 
 const AddComment = ({ postId }) => {
+  const { mutate } = useSWRConfig();
+
   const addCommentHandler = async (e) => {
     e.preventDefault();
     const { author, password, content } = e.target;
     await addComment(postId, author.value, content.value, password.value);
+    mutate(`comments/${postId}`);
     author.value = "";
     password.value = "";
     content.value = "";
