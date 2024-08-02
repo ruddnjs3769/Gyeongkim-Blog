@@ -2,23 +2,11 @@
 import MDEditor from "@uiw/react-md-editor";
 import { useNavigate } from "react-router-dom";
 import { deletePost, updateLikes } from "../supabase/posts";
-import { useState, useEffect } from "react";
 import { useSWRConfig } from "swr";
 
 const Post = ({ post, isLogin }) => {
   const navigate = useNavigate();
   const { mutate } = useSWRConfig();
-  const [hasLiked, setHasLiked] = useState(false);
-
-  useEffect(() => {
-    const likedDate = localStorage.getItem(`liked_${post.id}`);
-    if (likedDate) {
-      const today = new Date().toLocaleDateString();
-      if (likedDate === today) {
-        setHasLiked(true);
-      }
-    }
-  }, [post.id]);
 
   const handleDeletePost = async () => {
     await deletePost(post.id);
@@ -26,15 +14,22 @@ const Post = ({ post, isLogin }) => {
   };
 
   const handleLike = () => {
-    if (hasLiked) {
-      alert("오늘 이미 추천하셨습니다.");
-      return;
+    const likedDate = localStorage.getItem(`liked_${post.id}`);
+    const today = new Date().toLocaleDateString();
+
+    if (likedDate === today) {
+      // 좋아요 취소 로직
+      localStorage.removeItem(`liked_${post.id}`);
+      // 좋아요 수 감소 로직 추가
+      updateLikes(post.id, post.like - 1);
+      mutate("post/" + post.id, { ...post, like: post.like - 1 }, false);
+    } else {
+      // 좋아요 로직
+      localStorage.setItem(`liked_${post.id}`, today);
+      // 좋아요 수 증가 로직 추가
+      updateLikes(post.id, post.like + 1);
+      mutate("post/" + post.id, { ...post, like: post.like + 1 }, false);
     }
-    localStorage.setItem(`liked_${post.id}`, new Date().toLocaleDateString());
-    setHasLiked(true);
-    // 여기에 추천 수 증가 로직 추가
-    updateLikes(post.id, post.like + 1);
-    mutate("post/" + post.id, { ...post, like: post.like + 1 }, false);
   };
 
   return (
