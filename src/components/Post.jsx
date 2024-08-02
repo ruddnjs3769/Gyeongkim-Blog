@@ -1,14 +1,40 @@
 // Post.jsx
 import MDEditor from "@uiw/react-md-editor";
 import { useNavigate } from "react-router-dom";
-import { deletePost } from "../supabase/posts";
+import { deletePost, updateLikes } from "../supabase/posts";
+import { useState, useEffect } from "react";
+import { useSWRConfig } from "swr";
 
 const Post = ({ post, isLogin }) => {
   const navigate = useNavigate();
+  const { mutate } = useSWRConfig();
+  const [hasLiked, setHasLiked] = useState(false);
+
+  useEffect(() => {
+    const likedDate = localStorage.getItem(`liked_${post.id}`);
+    if (likedDate) {
+      const today = new Date().toLocaleDateString();
+      if (likedDate === today) {
+        setHasLiked(true);
+      }
+    }
+  }, [post.id]);
 
   const handleDeletePost = async () => {
     await deletePost(post.id);
     navigate("/blog/list");
+  };
+
+  const handleLike = () => {
+    if (hasLiked) {
+      alert("오늘 이미 추천하셨습니다.");
+      return;
+    }
+    localStorage.setItem(`liked_${post.id}`, new Date().toLocaleDateString());
+    setHasLiked(true);
+    // 여기에 추천 수 증가 로직 추가
+    updateLikes(post.id, post.like + 1);
+    mutate("post/" + post.id, { ...post, like: post.like + 1 }, false);
   };
 
   return (
@@ -27,9 +53,23 @@ const Post = ({ post, isLogin }) => {
         ))}
       </div>
       <MDEditor.Markdown source={post.content} />
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-between">
+        <div>
+          <span className="text-Gray text-sm">
+            작성일: {new Date(post.created_at).toLocaleDateString()}
+          </span>
+        </div>
+        <div>
+          <button
+            className="text-white text-base border border-primary rounded-lg p-2 hover:bg-primary"
+            onClick={handleLike}
+          >
+            👍
+          </button>
+          <span className="text-Gray text-sm ml-2">{post.like}</span>
+        </div>
         {isLogin && (
-          <>
+          <div className="flex gap-3">
             <button
               className="hover:underline text-Gray text-sm"
               onClick={() => navigate(`/blog/edit/${post.id}`)}
@@ -42,7 +82,7 @@ const Post = ({ post, isLogin }) => {
             >
               삭제하기
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>

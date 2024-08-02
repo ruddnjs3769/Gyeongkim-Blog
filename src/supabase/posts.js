@@ -82,3 +82,16 @@ export const readUniqueTags = async () => {
   }
   return data;
 };
+
+export const updateLikes = async (id, like) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .update({ like: like })
+    .eq("id", id)
+    .select();
+  if (error) {
+    console.error(error);
+    alert("좋아요 중 오류가 발생했습니다.");
+  }
+  return data;
+};
