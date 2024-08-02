@@ -7,16 +7,17 @@ import useSWR from "swr";
 const BlogPosting = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: post, error, isLoading } = useSWR(id, readPost);
+  const {
+    data: post,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR("post/" + id, () => readPost(id));
 
   const handleSubmit = async (post) => {
-    const { error } = updatePost(id, post);
-    if (error) {
-      console.error("Error: ", error);
-    } else {
-      alert("수정이 완료되었습니다.");
-      navigate(`/blog/detail/${id}`);
-    }
+    await updatePost(id, post);
+    navigate(`/blog/detail/${id}`);
+    mutate();
   };
   console.log(post);
   if (isLoading) return <div>Loading...</div>;

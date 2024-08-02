@@ -13,7 +13,7 @@ const PostDetail = () => {
     data: post,
     error,
     isLoading,
-  } = useSWR("post" + id, () => readPost(id), {
+  } = useSWR("post/" + id, () => readPost(id), {
     revalidateOnMount: true,
     revalidateIfStale: false,
   });

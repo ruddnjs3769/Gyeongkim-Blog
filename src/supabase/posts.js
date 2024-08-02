@@ -21,13 +21,45 @@ export const readPost = async (id) => {
 };
 
 export const createPost = async (post) => {
-  const { data, error } = await supabase.from("posts").insert([post]);
-  return { data, error };
+  const { data, error } = await supabase.from("posts").insert([post]).select();
+
+  if (data) {
+    alert("성공적으로 게시물이 작성되었습니다.");
+  }
+  if (error) {
+    console.error(error);
+    alert("게시물 작성 중 오류가 발생했습니다.");
+  }
 };
 
 export const updatePost = async (id, post) => {
-  const { error } = await supabase.from("posts").update(post).eq("id", id);
-  return { error };
+  const { data, error } = await supabase
+    .from("posts")
+    .update(post)
+    .eq("id", id)
+    .select();
+  if (data) {
+    alert("성공적으로 게시물이 수정되었습니다.");
+  }
+  if (error) {
+    console.error(error);
+    alert("게시물 수정 중 오류가 발생했습니다.");
+  }
+};
+
+export const deletePost = async (id) => {
+  const { data, error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", id)
+    .select();
+  if (data) {
+    alert("성공적으로 게시물이 삭제되었습니다.");
+  }
+  if (error) {
+    console.error(error);
+    alert("게시물 삭제 중 오류가 발생했습니다.");
+  }
 };
 
 export const readTags = async () => {
@@ -40,11 +72,6 @@ export const readTags = async () => {
     return tags.flat();
   }
   return data;
-};
-
-export const deletePost = async (id) => {
-  const { error } = await supabase.from("posts").delete().eq("id", id);
-  return { error };
 };
 
 export const readUniqueTags = async () => {

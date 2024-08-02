@@ -1,15 +1,16 @@
 import PostForm from "@/components/PostForm.jsx";
 import { createPost } from "@/supabase/posts";
+import { useNavigate } from "react-router-dom";
+import { useSWRConfig } from "swr";
 
 const BlogPosting = () => {
-  const handleSubmit = (post) => {
-    const { data, error } = createPost(post);
+  const navigate = useNavigate();
+  const { mutate } = useSWRConfig();
 
-    if (error) {
-      console.error("Error: ", error);
-    } else {
-      console.log("Posts: ", data);
-    }
+  const handleSubmit = (post) => {
+    createPost(post);
+    navigate("/blog/list");
+    mutate("posts");
   };
 
   return (

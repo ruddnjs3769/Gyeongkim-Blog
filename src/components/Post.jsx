@@ -7,11 +7,7 @@ const Post = ({ post, isLogin }) => {
   const navigate = useNavigate();
 
   const handleDeletePost = async () => {
-    const { error } = await deletePost(post.id);
-    if (error) {
-      console.error(error);
-      return;
-    }
+    await deletePost(post.id);
     navigate("/blog/list");
   };
 
