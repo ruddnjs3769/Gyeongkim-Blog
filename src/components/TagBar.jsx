@@ -1,12 +1,17 @@
 import { readTags } from "@/supabase/posts";
 import useSWR from "swr";
 import useTagStore from "@/zustand/useTagStore";
+import { useNavigate } from "react-router-dom";
 
 const TagBar = () => {
+  const navigate = useNavigate();
   const { data: tags, error, isLoading } = useSWR("tags", readTags);
   const setCurrentTag = useTagStore((state) => state.setCurrentTag);
-  const currentTag = useTagStore((state) => state.currentTag);
-  console.log(currentTag);
+
+  const handleTagClick = (tag) => {
+    setCurrentTag(tag);
+    navigate("/blog/list");
+  };
 
   if (error) return <div>Error: {error}</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -15,7 +20,7 @@ const TagBar = () => {
     <div className="flex gap-3">
       <span onClick={() => setCurrentTag("all")}>전체 보기</span>
       {tags.map((tag, index) => (
-        <span key={index} onClick={() => setCurrentTag(tag)}>
+        <span key={index} onClick={() => handleTagClick(tag)}>
           {tag}
         </span>
       ))}
