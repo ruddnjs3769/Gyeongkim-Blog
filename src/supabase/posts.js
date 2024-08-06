@@ -80,7 +80,10 @@ export const readUniqueTags = async () => {
     console.error(error);
     throw error;
   }
-  return data;
+  if (data) {
+    let tags = data.map((tag) => JSON.parse(tag));
+    return tags;
+  }
 };
 
 export const updateLikes = async (id, like) => {

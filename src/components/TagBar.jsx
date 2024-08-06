@@ -1,11 +1,11 @@
-import { readTags } from "@/supabase/posts";
+import { readUniqueTags } from "@/supabase/posts";
 import useSWR from "swr";
 import useTagStore from "@/zustand/useTagStore";
 import { useNavigate } from "react-router-dom";
 
 const TagBar = () => {
   const navigate = useNavigate();
-  const { data: tags, error, isLoading } = useSWR("tags", readTags);
+  const { data: tags, error, isLoading } = useSWR("tags", readUniqueTags);
   const setCurrentTag = useTagStore((state) => state.setCurrentTag);
 
   const handleTagClick = (tag) => {

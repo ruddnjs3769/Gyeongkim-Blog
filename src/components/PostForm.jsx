@@ -5,10 +5,13 @@ import rehypeSanitize from "rehype-sanitize";
 import onImagePasted from "@/utils/onImagePasted";
 import CreatableSelect from "react-select/creatable";
 import usePostStore from "@/zustand/usePostStore";
+import useSWR from "swr";
+import { readUniqueTags } from "@/supabase/posts";
 
 const PostForm = ({ initialValue, onSubmit }) => {
   const { post, setPost, resetPost, loadPostFromLocalStorage } = usePostStore();
   const { title = "", tags = [], content } = post;
+  const { data: tagsData } = useSWR("tags", readUniqueTags);
 
   useEffect(() => {
     if (initialValue) {
@@ -59,6 +62,7 @@ const PostForm = ({ initialValue, onSubmit }) => {
         name="tags"
         value={tags?.map((t) => ({ label: t, value: t }))}
         onChange={handleTagChange}
+        options={tagsData?.map((tag) => ({ label: tag, value: tag })) || []}
         className="basic-multi-select"
         classNamePrefix="select"
       />
